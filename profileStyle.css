@@ -1,0 +1,445 @@
+/* ==========================================================================
+   Nish Mandal — profile site
+   Grunge scrapbook / zine-collage design system
+   Reference: moodboard of DIY patches, torn paper notes, handwritten captions
+   ========================================================================== */
+
+/* -- Fonts ----------------------------------------------------------------
+   Anton     : poster display headlines (the "torn zine" voice)
+   Space Mono: body copy + UI (typewriter, DIY-zine feel)
+   Permanent Marker: handwritten captions, used sparingly
+--------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Permanent+Marker&display=swap');
+
+/* -- Tokens ----------------------------------------------------------------
+   Palette pulled straight from the moodboard: washed-out photo blacks,
+   torn cream paper, a faded heart-patch rust, olive utility fabric,
+   and the gold of the starburst badge.
+--------------------------------------------------------------------------- */
+:root {
+    --ink: #131217;
+    --ink-soft: #1d1b22;
+    --line: #34313b;
+
+    --paper: #efe8d8;
+    --paper-dim: #e2dac6;
+    --paper-ink: #201c16;
+
+    --rust: #9a4632;
+    --olive: #565a41;
+    --gold: #c8a15b;
+
+    --font-display: 'Anton', 'Arial Narrow', sans-serif;
+    --font-body: 'Space Mono', ui-monospace, 'Courier New', monospace;
+    --font-hand: 'Permanent Marker', cursive;
+
+    --radius-patch: 2px;
+    --tilt-1: -1.6deg;
+    --tilt-2: 1.4deg;
+    --tilt-3: -0.8deg;
+
+    --max-width: 880px;
+}
+
+/* -- Reset ------------------------------------------------------------- */
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    position: relative;
+    min-height: 100vh;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: var(--gold);
+}
+
+/* Film-grain overlay: a self-contained SVG noise field, no image request. */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+}
+
+/* -- Layout shell -------------------------------------------------------- */
+main {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 2rem 1.25rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+/* -- Nav / footer strip: a torn paper band pinned across the page -------- */
+.strip-nav {
+    background: var(--paper);
+    color: var(--paper-ink);
+    position: relative;
+    padding: 0.9rem 1.25rem;
+    margin-bottom: 6px;
+}
+
+.strip-nav::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 8px;
+    background: var(--paper);
+    clip-path: polygon(0% 0%, 3% 100%, 7% 20%, 11% 100%, 15% 10%, 19% 100%, 23% 30%, 27% 100%,
+            31% 15%, 35% 100%, 39% 25%, 43% 100%, 47% 10%, 51% 100%, 55% 20%, 59% 100%,
+            63% 15%, 67% 100%, 71% 30%, 75% 100%, 79% 20%, 83% 100%, 87% 10%, 91% 100%,
+            95% 25%, 100% 0%);
+}
+
+.strip-nav nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.strip-nav a {
+    color: var(--paper-ink);
+    text-decoration: none;
+    border-bottom: 2px solid var(--rust);
+    padding-bottom: 1px;
+}
+
+.strip-nav a:hover,
+.strip-nav a:focus-visible {
+    color: var(--rust);
+}
+
+footer.strip-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1001;
+    margin: 0;
+    padding: 0.35rem 1.25rem;
+    width: auto;
+    text-align: center;
+    font-size: 0.7rem;
+}
+
+footer.strip-nav p {
+    margin: 0;
+}
+
+footer.strip-nav::after {
+    display: none;
+}
+
+/* -- Hero ------------------------------------------------------------- */
+.hero {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    padding-top: 1.5rem;
+}
+
+.polaroid {
+    background: var(--paper);
+    padding: 10px 10px 34px;
+    transform: rotate(var(--tilt-1)) scale(1);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.45);
+    width: 200px;
+    transition: transform 0.2s ease;
+}
+
+.polaroid:hover,
+.polaroid:focus-within {
+    transform: rotate(var(--tilt-1)) scale(1.06);
+}
+
+.polaroid img {
+    width: 100%;
+    height: auto;
+    filter: grayscale(35%) contrast(1.05);
+}
+
+.hero-text {
+    flex: 1;
+    min-width: 240px;
+}
+
+h1.poster {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.75rem, 9vw, 5.5rem);
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    margin: 0 0 0.6rem;
+    color: var(--paper);
+}
+
+.sticky-note {
+    display: inline-block;
+    font-family: var(--font-hand);
+    font-size: 1.1rem;
+    color: var(--paper-ink);
+    background: var(--paper);
+    padding: 0.5rem 0.9rem;
+    transform: rotate(var(--tilt-2));
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* -- Patch component: the torn-paper card used across the page ---------- */
+.patch-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+}
+
+.patch {
+    background: var(--paper);
+    color: var(--paper-ink);
+    padding: 1.6rem 1.5rem 1.9rem;
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
+    clip-path: polygon(0% 3%, 4% 1%, 8% 4%, 12% 0.5%, 16% 3%, 20% 1%, 24% 4.5%, 28% 1%,
+            32% 3.5%, 36% 0.5%, 40% 3%, 44% 1%, 48% 4%, 52% 0.5%, 56% 3%, 60% 1%,
+            64% 4%, 68% 0.5%, 72% 3%, 76% 1%, 80% 4.5%, 84% 1%, 88% 3.5%, 92% 0.5%,
+            96% 3%, 100% 1%, 100% 100%, 0% 100%);
+    transform: rotate(var(--tilt-3)) scale(1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.patch:hover,
+.patch:focus-within {
+    transform: rotate(var(--tilt-3)) scale(1.025);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.5);
+}
+
+.patch--tilt-r {
+    transform: rotate(var(--tilt-2)) scale(1);
+}
+
+.patch--tilt-r:hover,
+.patch--tilt-r:focus-within {
+    transform: rotate(var(--tilt-2)) scale(1.025);
+}
+
+.patch--wide {
+    grid-column: 1 / -1;
+}
+
+.patch h2 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.6rem;
+    letter-spacing: 0.02em;
+    margin: 0 0 0.75rem;
+    color: var(--rust);
+}
+
+.patch p {
+    margin: 0;
+}
+
+.patch em {
+    color: var(--olive);
+    font-style: normal;
+    border-bottom: 1px dashed var(--olive);
+}
+
+.patch strong {
+    color: var(--rust);
+}
+
+/* Setlists: hobbies / goals, styled like a handwritten gig list */
+.setlist {
+    margin: 0;
+    padding-left: 1.2rem;
+}
+
+.setlist li {
+    padding: 0.15rem 0;
+}
+
+.setlist li::marker {
+    color: var(--gold);
+    font-weight: 700;
+}
+
+/* -- News search patch --------------------------------------------------- */
+.news-search form {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.news-search input[type="text"] {
+    flex: 1;
+    min-width: 180px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    padding: 0.6rem 0.75rem;
+    border: 2px solid var(--paper-ink);
+    background: var(--paper-dim);
+    color: var(--paper-ink);
+}
+
+.news-search button {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    font-size: 1rem;
+    padding: 0.6rem 1.3rem;
+    background: var(--rust);
+    color: var(--paper);
+    border: 2px solid var(--paper-ink);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.news-search button:hover,
+.news-search button:focus-visible {
+    background: var(--olive);
+}
+
+/* -- Projects page: ticket-stub table ------------------------------------ */
+.page-head {
+    padding-top: 1.5rem;
+}
+
+.ticket-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+}
+
+.ticket-table caption {
+    caption-side: top;
+    font-family: var(--font-hand);
+    text-align: left;
+    margin-bottom: 0.75rem;
+}
+
+.ticket-table thead th {
+    text-align: left;
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    font-size: 1.05rem;
+    color: var(--rust);
+    padding: 0 0.75rem 0.6rem;
+    border-bottom: 2px solid var(--paper-ink);
+}
+
+.ticket-table tbody td {
+    padding: 0.9rem 0.75rem;
+    border-bottom: 1px dashed var(--olive);
+    vertical-align: top;
+}
+
+.ticket-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.ticket-table tbody tr:nth-child(odd) {
+    background: rgba(86, 90, 65, 0.08);
+}
+
+/* -- Responsive ------------------------------------------------------- */
+@media (max-width: 620px) {
+    .patch-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .strip-nav nav ul {
+        gap: 0.4rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .ticket-table,
+    .ticket-table thead,
+    .ticket-table tbody,
+    .ticket-table th,
+    .ticket-table td,
+    .ticket-table tr {
+        display: block;
+    }
+
+    .ticket-table thead {
+        display: none;
+    }
+
+    .ticket-table tbody tr {
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .ticket-table tbody td {
+        border-bottom: none;
+        padding: 0.3rem 0.75rem;
+    }
+
+    .ticket-table tbody td::before {
+        content: attr(data-label);
+        display: block;
+        font-family: var(--font-display);
+        font-size: 0.75rem;
+        color: var(--rust);
+        margin-bottom: 0.1rem;
+    }
+}
