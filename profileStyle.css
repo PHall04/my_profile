@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Nish Mandal — profile site
+   Paul Hall — profile site
    Grunge scrapbook / zine-collage design system
    Reference: moodboard of DIY patches, torn paper notes, handwritten captions
    ========================================================================== */
@@ -115,6 +115,19 @@ main {
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
+}
+
+.page-head {
+    padding-top: 1.5rem;
+}
+
+.section-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    margin: 0;
 }
 
 /* -- Nav / footer strip: a torn paper band pinned across the page -------- */
@@ -239,11 +252,23 @@ h1.poster {
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
 }
 
-/* -- Patch component: the torn-paper card used across the page ---------- */
+/* -- Patch component: the torn-paper card used across the page ----------
+   Each patch reads its resting tilt from --tilt (falling back to --tilt-3),
+   so hover doesn't need a duplicate rule per variant, and any number of
+   patches dropped into a .patch-grid automatically alternate their tilt
+   via the nth-child rules below. */
 .patch-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 1.75rem;
+}
+
+.patch-grid .patch:nth-child(3n+2) {
+    --tilt: var(--tilt-2);
+}
+
+.patch-grid .patch:nth-child(3n) {
+    --tilt: var(--tilt-1);
 }
 
 .patch {
@@ -255,23 +280,14 @@ h1.poster {
             32% 3.5%, 36% 0.5%, 40% 3%, 44% 1%, 48% 4%, 52% 0.5%, 56% 3%, 60% 1%,
             64% 4%, 68% 0.5%, 72% 3%, 76% 1%, 80% 4.5%, 84% 1%, 88% 3.5%, 92% 0.5%,
             96% 3%, 100% 1%, 100% 100%, 0% 100%);
-    transform: rotate(var(--tilt-3)) scale(1);
+    transform: rotate(var(--tilt, var(--tilt-3))) scale(1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .patch:hover,
 .patch:focus-within {
-    transform: rotate(var(--tilt-3)) scale(1.025);
+    transform: rotate(var(--tilt, var(--tilt-3))) scale(1.025);
     box-shadow: 0 16px 30px rgba(0, 0, 0, 0.5);
-}
-
-.patch--tilt-r {
-    transform: rotate(var(--tilt-2)) scale(1);
-}
-
-.patch--tilt-r:hover,
-.patch--tilt-r:focus-within {
-    transform: rotate(var(--tilt-2)) scale(1.025);
 }
 
 .patch--wide {
@@ -287,8 +303,21 @@ h1.poster {
     color: var(--rust);
 }
 
+.patch h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+    margin: 0 0 0.15rem;
+    color: var(--paper-ink);
+}
+
 .patch p {
-    margin: 0;
+    margin: 0 0 0.75rem;
+}
+
+.patch p:last-child {
+    margin-bottom: 0;
 }
 
 .patch em {
@@ -301,7 +330,15 @@ h1.poster {
     color: var(--rust);
 }
 
-/* Setlists: hobbies / goals, styled like a handwritten gig list */
+/* Meta line under a role/qualification title: company or institution + dates */
+.patch .meta {
+    font-family: var(--font-hand);
+    color: var(--rust);
+    margin: 0 0 0.9rem;
+}
+
+/* Bulleted content: hobbies, achievements, skill lists — styled like a
+   handwritten gig setlist */
 .setlist {
     margin: 0;
     padding-left: 1.2rem;
@@ -316,91 +353,8 @@ h1.poster {
     font-weight: 700;
 }
 
-/* -- News search patch --------------------------------------------------- */
-.news-search form {
-    display: flex;
-    gap: 0.6rem;
-    margin-top: 0.75rem;
-    flex-wrap: wrap;
-}
-
-.news-search input[type="text"] {
-    flex: 1;
-    min-width: 180px;
-    font-family: var(--font-body);
-    font-size: 0.95rem;
-    padding: 0.6rem 0.75rem;
-    border: 2px solid var(--paper-ink);
-    background: var(--paper-dim);
-    color: var(--paper-ink);
-}
-
-.news-search button {
-    font-family: var(--font-display);
-    letter-spacing: 0.02em;
-    font-size: 1rem;
-    padding: 0.6rem 1.3rem;
-    background: var(--rust);
-    color: var(--paper);
-    border: 2px solid var(--paper-ink);
-    cursor: pointer;
-    transition: background 0.15s ease;
-}
-
-.news-search button:hover,
-.news-search button:focus-visible {
-    background: var(--olive);
-}
-
-/* -- Projects page: ticket-stub table ------------------------------------ */
-.page-head {
-    padding-top: 1.5rem;
-}
-
-.ticket-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.95rem;
-}
-
-.ticket-table caption {
-    caption-side: top;
-    font-family: var(--font-hand);
-    text-align: left;
-    margin-bottom: 0.75rem;
-}
-
-.ticket-table thead th {
-    text-align: left;
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: 0.03em;
-    font-size: 1.05rem;
-    color: var(--rust);
-    padding: 0 0.75rem 0.6rem;
-    border-bottom: 2px solid var(--paper-ink);
-}
-
-.ticket-table tbody td {
-    padding: 0.9rem 0.75rem;
-    border-bottom: 1px dashed var(--olive);
-    vertical-align: top;
-}
-
-.ticket-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-.ticket-table tbody tr:nth-child(odd) {
-    background: rgba(86, 90, 65, 0.08);
-}
-
 /* -- Responsive ------------------------------------------------------- */
 @media (max-width: 620px) {
-    .patch-grid {
-        grid-template-columns: 1fr;
-    }
-
     .hero {
         flex-direction: column;
         align-items: flex-start;
@@ -409,37 +363,5 @@ h1.poster {
     .strip-nav nav ul {
         gap: 0.4rem 1rem;
         font-size: 0.85rem;
-    }
-
-    .ticket-table,
-    .ticket-table thead,
-    .ticket-table tbody,
-    .ticket-table th,
-    .ticket-table td,
-    .ticket-table tr {
-        display: block;
-    }
-
-    .ticket-table thead {
-        display: none;
-    }
-
-    .ticket-table tbody tr {
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-    }
-
-    .ticket-table tbody td {
-        border-bottom: none;
-        padding: 0.3rem 0.75rem;
-    }
-
-    .ticket-table tbody td::before {
-        content: attr(data-label);
-        display: block;
-        font-family: var(--font-display);
-        font-size: 0.75rem;
-        color: var(--rust);
-        margin-bottom: 0.1rem;
     }
 }
